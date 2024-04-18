@@ -33,34 +33,34 @@ def classify_country(gdpp, income, child_mort):
     else:
         return "Developing"
 
-# Function to plot graphs
-def plot_graphs(filtered_data):
-    fig = plt.figure(figsize=(18, 12))
+# # Function to plot graphs
+# def plot_graphs(filtered_data):
+#     fig = plt.figure(figsize=(18, 12))
     
-    # Check if clustering columns exist in the filtered_data DataFrame
-    if 'cluster_id_hc' in filtered_data.columns:
+#     # Check if clustering columns exist in the filtered_data DataFrame
+#     if 'cluster_id_hc' in filtered_data.columns:
         
-        # Scatterplots
-        ax1 = fig.add_subplot(2, 3, 1, title="gdpp vs child_mort")
-        ax2 = fig.add_subplot(2, 3, 2, title="gdpp vs income")
-        ax3 = fig.add_subplot(2, 3, 3, title="income vs child_mort")
+#         # Scatterplots
+#         ax1 = fig.add_subplot(2, 3, 1, title="gdpp vs child_mort")
+#         ax2 = fig.add_subplot(2, 3, 2, title="gdpp vs income")
+#         ax3 = fig.add_subplot(2, 3, 3, title="income vs child_mort")
         
-        sns.scatterplot(x='gdpp', y='child_mort', hue='cluster_id_hc', palette=['red', 'blue', 'green'], data=filtered_data, ax=ax1)
-        sns.scatterplot(x='gdpp', y='income', hue='cluster_id_hc', palette=['red', 'blue', 'green'], data=filtered_data, ax=ax2)
-        sns.scatterplot(x='income', y='child_mort', hue='cluster_id_hc', palette=['red', 'blue', 'green'], data=filtered_data, ax=ax3)
+#         sns.scatterplot(x='gdpp', y='child_mort', hue='cluster_id_hc', palette=['red', 'blue', 'green'], data=filtered_data, ax=ax1)
+#         sns.scatterplot(x='gdpp', y='income', hue='cluster_id_hc', palette=['red', 'blue', 'green'], data=filtered_data, ax=ax2)
+#         sns.scatterplot(x='income', y='child_mort', hue='cluster_id_hc', palette=['red', 'blue', 'green'], data=filtered_data, ax=ax3)
         
-        # Rotate x-axis labels for better readability
-        for ax in [ax1, ax2, ax3]:
-            ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
+#         # Rotate x-axis labels for better readability
+#         for ax in [ax1, ax2, ax3]:
+#             ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
         
-        plt.tight_layout()
-        st.pyplot(fig)
+#         plt.tight_layout()
+#         st.pyplot(fig)
         
-    else:
-        st.write("Cluster ID (Hierarchical) not available in the dataset for visualization.")
+#     else:
+#         st.write("Cluster ID (Hierarchical) not available in the dataset for visualization.")
     
-    # Close the figure to free up memory
-    plt.close(fig)
+#     # Close the figure to free up memory
+#     plt.close(fig)
 
 # Output Section
 if submit_button:
@@ -89,6 +89,6 @@ if submit_button:
         classification = classify_country(gdpp, income, child_mort)
         st.write(f"Country Classification: {classification}")
     
-    # Visualization
-    st.subheader("Visualization")
-    plot_graphs(filtered_data)
+    # # Visualization
+    # st.subheader("Visualization")
+    # plot_graphs(filtered_data)
