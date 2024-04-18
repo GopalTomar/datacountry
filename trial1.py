@@ -18,14 +18,14 @@ child_mort = st.sidebar.number_input("Enter Child Mortality (child_mort):", min_
 
 submit_button = st.sidebar.button("Submit")
 
-# Function to classify country
-def classify_country(gdpp, income, child_mort):
-    if gdpp > 50000 or income > 40000:
-        return "Developed"
-    elif gdpp < 10000 or income < 1000 or child_mort > 50:
+# Function to classify country based on clustering results
+def classify_country_by_cluster(cluster_id_km, cluster_id_hc):
+    if cluster_id_km == 0 or cluster_id_hc == 0:  # Cluster 0 from either KMeans or Hierarchical is considered as Underdeveloped
         return "Underdeveloped"
-    else:
+    elif cluster_id_km == 1 or cluster_id_hc == 1:  # Cluster 1 from either KMeans or Hierarchical is considered as Developing
         return "Developing"
+    else:
+        return "Developed"
 
 # Function to find closest matching country based on input values
 def find_closest_country(gdpp, income, child_mort):
@@ -49,11 +49,16 @@ if submit_button:
     st.write(f"Net Income per person (Income): {income}")
     st.write(f"Child Mortality (child_mort): {child_mort}")
     
-    # Classify country based on input values
-    classification = classify_country(gdpp, income, child_mort)
-    
     # Find closest matching country
     closest_country = find_closest_country(gdpp, income, child_mort)
+    
+    # Get clustering labels for the closest matching country
+    closest_country_row = clustered_dataset.loc[clustered_dataset['country'] == closest_country]
+    cluster_id_km = closest_country_row['cluster_id_km'].values[0]
+    cluster_id_hc = closest_country_row['cluster_id_hc'].values[0]
+    
+    # Classify country based on clustering labels
+    classification = classify_country_by_cluster(cluster_id_km, cluster_id_hc)
     
     st.subheader("Country Classification:")
     st.write(f"The provided values correspond to a {classification} country.")
