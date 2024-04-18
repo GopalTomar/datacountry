@@ -27,18 +27,20 @@ def classify_country(gdpp, income, child_mort):
     else:
         return "Developing"
 
-# Function to find country based on input values
-def find_country(gdpp, income, child_mort):
-    filtered_data = clustered_dataset[
-        (clustered_dataset['gdpp'] == gdpp) &
-        (clustered_dataset['income'] == income) &
-        (clustered_dataset['child_mort'] == child_mort)
-    ]
+# Function to find closest matching country based on input values
+def find_closest_country(gdpp, income, child_mort):
+    # Calculate differences with input values
+    clustered_dataset['gdpp_diff'] = abs(clustered_dataset['gdpp'] - gdpp)
+    clustered_dataset['income_diff'] = abs(clustered_dataset['income'] - income)
+    clustered_dataset['child_mort_diff'] = abs(clustered_dataset['child_mort'] - child_mort)
     
-    if not filtered_data.empty:
-        return filtered_data['country'].iloc[0]
-    else:
-        return "No matching country found"
+    # Calculate total difference as a sum of differences
+    clustered_dataset['total_diff'] = clustered_dataset['gdpp_diff'] + clustered_dataset['income_diff'] + clustered_dataset['child_mort_diff']
+    
+    # Find the country with the smallest total difference
+    closest_country = clustered_dataset.loc[clustered_dataset['total_diff'].idxmin(), 'country']
+    
+    return closest_country
 
 # Output Section
 if submit_button:
@@ -50,11 +52,11 @@ if submit_button:
     # Classify country based on input values
     classification = classify_country(gdpp, income, child_mort)
     
-    # Find matching country
-    matching_country = find_country(gdpp, income, child_mort)
+    # Find closest matching country
+    closest_country = find_closest_country(gdpp, income, child_mort)
     
     st.subheader("Country Classification:")
     st.write(f"The provided values correspond to a {classification} country.")
     
-    st.subheader("Matching Country:")
-    st.write(f"The matching country is: {matching_country}")
+    st.subheader("Closest Matching Country:")
+    st.write(f"The closest matching country is: {closest_country}")
