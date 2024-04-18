@@ -15,7 +15,7 @@ st.sidebar.title("Input Section")
 
 # # Country Selection Dropdown
 # country_options = ['All Countries'] + clustered_dataset['country'].tolist()
-# selected_country = st.sidebar.selectbox("Select a Country:", country_options)
+selected_country = st.sidebar.selectbox("Select a Country:", country_options)
 
 # Data Input Fields
 gdpp = st.sidebar.number_input("Enter GDP per capita (gdpp):", min_value=0)
