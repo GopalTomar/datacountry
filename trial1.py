@@ -27,6 +27,19 @@ def classify_country(gdpp, income, child_mort):
     else:
         return "Developing"
 
+# Function to find country based on input values
+def find_country(gdpp, income, child_mort):
+    filtered_data = clustered_dataset[
+        (clustered_dataset['gdpp'] == gdpp) &
+        (clustered_dataset['income'] == income) &
+        (clustered_dataset['child_mort'] == child_mort)
+    ]
+    
+    if not filtered_data.empty:
+        return filtered_data['country'].iloc[0]
+    else:
+        return "No matching country found"
+
 # Output Section
 if submit_button:
     st.subheader("Input Values:")
@@ -36,5 +49,12 @@ if submit_button:
     
     # Classify country based on input values
     classification = classify_country(gdpp, income, child_mort)
+    
+    # Find matching country
+    matching_country = find_country(gdpp, income, child_mort)
+    
     st.subheader("Country Classification:")
     st.write(f"The provided values correspond to a {classification} country.")
+    
+    st.subheader("Matching Country:")
+    st.write(f"The matching country is: {matching_country}")
