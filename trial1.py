@@ -1,9 +1,11 @@
+# Importing required libraries
 import streamlit as st
 import pandas as pd
 
 # Load your clustered dataset
 clustered_dataset = pd.read_csv("Country_data.csv")
 
+# Streamlit UI
 st.title("Fund Allocation Based on Clustering")
 
 # Input Section
@@ -15,15 +17,6 @@ income = st.sidebar.number_input("Enter Net Income per person (Income):", min_va
 child_mort = st.sidebar.number_input("Enter Child Mortality (child_mort):", min_value=0)
 
 submit_button = st.sidebar.button("Submit")
-
-# Function to classify country based on clustering labels
-def classify_country_by_cluster(cluster_id_km, cluster_id_hc):
-    if cluster_id_km == 0 or cluster_id_hc == 0:
-        return "Underdeveloped"
-    elif cluster_id_km == 1 or cluster_id_hc == 1:
-        return "Developing"
-    else:
-        return "Developed"
 
 # Function to classify country
 def classify_country(gdpp, income, child_mort):
@@ -56,27 +49,14 @@ if submit_button:
     st.write(f"Net Income per person (Income): {income}")
     st.write(f"Child Mortality (child_mort): {child_mort}")
     
+    # Classify country based on input values
+    classification = classify_country(gdpp, income, child_mort)
+    
     # Find closest matching country
     closest_country = find_closest_country(gdpp, income, child_mort)
     
-    # Check if the closest_country is in the dataset
-    if closest_country in clustered_dataset['country'].values:
-        closest_country_row = clustered_dataset.loc[clustered_dataset['country'] == closest_country]
-        
-        # Check if the columns exist in the closest_country_row
-        if 'cluster_id_km' in closest_country_row.columns and 'cluster_id_hc' in closest_country_row.columns:
-            cluster_id_km = closest_country_row['cluster_id_km'].values[0]
-            cluster_id_hc = closest_country_row['cluster_id_hc'].values[0]
-            
-            # Classify country based on clustering labels
-            classification = classify_country_by_cluster(cluster_id_km, cluster_id_hc)
-            
-            st.subheader("Country Classification:")
-            st.write(f"The provided values correspond to a {classification} country.")
-            
-            st.subheader("Closest Matching Country:")
-            st.write(f"The closest matching country is: {closest_country}")
-        else:
-            st.write("Error: Required columns not found in the dataset.")
-    else:
-        st.write(f"Error: {closest_country} not found in the dataset.")
+    st.subheader("Country Classification:")
+    st.write(f"The provided values correspond to a {classification} country.")
+    
+    st.subheader("Closest Matching Country:")
+    st.write(f"The closest matching country is: {closest_country}")
